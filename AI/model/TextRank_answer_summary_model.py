@@ -1,26 +1,21 @@
 import numpy as np
-from konlpy.tag import Okt, Kkma
+import kss
+from konlpy.tag import Okt
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class SentenceTokenizer(object):
     def __init__(self):
-        self.kkma = Kkma()
+        self.kss = kss
         self.okt = Okt()
 
     def text2sentences(self, text):
-        sentences = self.kkma.sentences(text)
-        for idx in range(0, len(sentences)):
-            if len(sentences[idx]) <= 10:
-                sentences[idx - 1] += (' ' + sentences[idx])
-                sentences[idx] = ''
-        return sentences
+        return self.kss.split_sentences(text)
 
     def get_nouns(self, sentences):
         nouns = []
         for sentence in sentences:
-            if sentence is not '':
-                nouns.append(' '.join([noun for noun in self.okt.nouns(str(sentence))]))
+            nouns.append(' '.join([noun for noun in self.okt.nouns(str(sentence))]))
         return nouns
 
 
@@ -73,5 +68,5 @@ class TextRank(object):
         index.sort()
         for idx in index:
             summary.append(self.sentences[idx])
-
+            
         return summary
