@@ -5,6 +5,7 @@ from typing import Union
 from pydantic import BaseModel
 from transformers import GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
+from model.TextRank_answer_summary_model import TextRank
 
 app = FastAPI()
 
@@ -46,3 +47,10 @@ def generate_answer(cover_letter: CoverLetter):
     for ids in generate_ids:
         cover_letter.output.append(tokenizer.decode(ids[input_ids.shape[1]:], skip_special_tokens=True))
     return {"generate_answer": cover_letter.output}
+
+
+@app.post("/answer/summary-model")
+def summary_answer(cover_letter: CoverLetter):
+    textrank = TextRank(cover_letter.input)
+    cover_letter.output = textrank.summarize(3)
+    return {"summary_answer": cover_letter.output}
