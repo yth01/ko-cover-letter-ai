@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel, BartForConditionalGeneration
-from service import generate_answer, generate_title, generate_good_advice,summarize_answer
+from service import generate_answer, generate_title, generate_good_advice, generate_regret_advice, summarize_answer
 
 
 class User(BaseModel):
@@ -18,6 +18,7 @@ KoGPT2_answer_generative_model = GPT2LMHeadModel.from_pretrained("./model/koGPT2
 KoBART_tokenizer = PreTrainedTokenizerFast.from_pretrained("gogamza/kobart-base-v2")
 KoBART_title_generative_model = BartForConditionalGeneration.from_pretrained("./model/koBART_title_generative_model")
 KoBART_good_advice_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_good_advice_generative_model")
+KoBART_regret_advice_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_regret_advice_generative_model")
 
 
 @app.post("/generative-model/answer")
@@ -33,6 +34,11 @@ def get_generated_title(user: User):
 @app.post("/generative-model/good-advice")
 def get_generated_good_advice(user: User):
     return {"generated_good_advice": generate_good_advice(user.input, KoBART_good_advice_generative_model, KoBART_tokenizer)}
+
+
+@app.post("/generative-model/regret-advice")
+def get_generated_regret_advice(user: User):
+    return {"generated_regret_advice": generate_regret_advice(user.input, KoBART_regret_advice_generative_model, KoBART_tokenizer)}
 
 
 @app.post("/summary-model/answer")
