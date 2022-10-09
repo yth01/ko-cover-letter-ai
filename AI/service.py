@@ -53,7 +53,26 @@ def generate_title(user_input, model, tokenizer):
 def generate_good_advice(user_input, model, tokenizer):
     input_ids = tokenizer.encode(user_input, return_tensors="pt")
     generate_ids = model.generate(input_ids,
-                                  max_length=input_ids.shape[1] + 16,
+                                  max_length=input_ids.shape[1] + 128,
+                                  pad_token_id=tokenizer.pad_token_id,
+                                  eos_token_id=tokenizer.eos_token_id,
+                                  bos_token_id=tokenizer.bos_token_id,
+                                  do_sample=True,
+                                  temperature=1.1,
+                                  top_k=50,
+                                  top_p=0.92,
+                                  num_return_sequences=3
+                                  )
+    model_output = []
+    for ids in generate_ids:
+        model_output.append(tokenizer.decode(ids, skip_special_tokens=True))
+    return model_output
+
+
+def generate_regret_advice(user_input, model, tokenizer):
+    input_ids = tokenizer.encode(user_input, return_tensors="pt")
+    generate_ids = model.generate(input_ids,
+                                  max_length=input_ids.shape[1] + 256,
                                   pad_token_id=tokenizer.pad_token_id,
                                   eos_token_id=tokenizer.eos_token_id,
                                   bos_token_id=tokenizer.bos_token_id,
