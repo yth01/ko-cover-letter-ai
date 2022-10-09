@@ -13,10 +13,10 @@ app = FastAPI()
 KoGPT2_tokenizer = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
                                                            bos_token='<s>', eos_token='</s>', unk_token='<unk>',
                                                            pad_token='<pad>', mask_token='<mask>')
-KoGPT2_answer_generative_model = GPT2LMHeadModel.from_pretrained("./model/koGPT2_answer_generative_model")
+KoGPT2_answer_generative_model = GPT2LMHeadModel.from_pretrained("./model/KoGPT2_answer_generative_model")
 
 KoBART_tokenizer = PreTrainedTokenizerFast.from_pretrained("gogamza/kobart-base-v2")
-KoBART_title_generative_model = BartForConditionalGeneration.from_pretrained("./model/koBART_title_generative_model")
+KoBART_title_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_title_generative_model")
 KoBART_good_advice_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_good_advice_generative_model")
 KoBART_regret_advice_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_regret_advice_generative_model")
 
