@@ -3,7 +3,7 @@ import kss
 from model.TextRank_answer_summary_model import TextRank
 
 
-def generate_answer(user_input, model, tokenizer):
+def generate_next_sentence(user_input, model, tokenizer):
     input_ids = []
     sentences = kss.split_sentences(user_input)
     for sentence in sentences[:-1]:
