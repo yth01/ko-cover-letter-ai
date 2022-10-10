@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel, BartForConditionalGeneration
-from service import generate_answer, generate_title, generate_good_advice, generate_regret_advice, summarize_answer
+from service import generate_next_sentence, generate_title, generate_good_advice, generate_regret_advice, summarize_answer
 
 
 class User(BaseModel):
@@ -21,9 +21,9 @@ KoBART_good_advice_generative_model = BartForConditionalGeneration.from_pretrain
 KoBART_regret_advice_generative_model = BartForConditionalGeneration.from_pretrained("./model/KoBART_regret_advice_generative_model")
 
 
-@app.post("/generative-model/answer")
-def get_generated_answer(user: User):
-    return {"generated_answer": generate_answer(user.input, KoGPT2_answer_generative_model, KoGPT2_tokenizer)}
+@app.post("/generative-model/next-sentence")
+def get_generated_next_sentence(user: User):
+    return {"generated_next_sentence": generate_next_sentence(user.input, KoGPT2_answer_generative_model, KoGPT2_tokenizer)}
 
 
 @app.post("/generative-model/title")
