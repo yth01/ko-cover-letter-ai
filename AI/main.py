@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel, BartForConditionalGeneration
 from service import generate_next_sentence, generate_title, generate_good_advice, generate_regret_advice, summarize_answer
-
+from fastapi.middleware.cors import CORSMiddleware
 
 class User(BaseModel):
     input: str
@@ -44,3 +44,14 @@ def get_generated_regret_advice(user: User):
 @app.post("/summary-model/answer")
 def get_summarized_answer(user: User):
     return {"summarized_answer": summarize_answer(user.input)}
+
+
+origins = ["http://localhost:8080"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
