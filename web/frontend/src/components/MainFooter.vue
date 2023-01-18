@@ -1,7 +1,7 @@
 <template>
     <footer>
-        <font-awesome-icon icon="fa-brands fa-github" v-on:click="MoveGithubProfile" v-on:mouseover="HighlightingIcon"
-            v-on:mouseout="RevertingIcon" v-bind:style="{ opacity: computedOpacity }" />
+        <font-awesome-icon icon="fa-brands fa-github" v-on:click="moveGithubProfile" v-on:mouseover="highlightingIcon"
+            v-on:mouseout="revertingIcon" v-bind:style="{ opacity: computedOpacity }" />
         <p>Copyright 2022. yth01 | All Rights Reserved</p>
     </footer>
 </template>
@@ -19,13 +19,13 @@ export default {
         }
     },
     methods: {
-        MoveGithubProfile: function () {
+        moveGithubProfile: function () {
             window.open("https://www.github.com/yth01")
         },
-        HighlightingIcon: function () {
+        highlightingIcon: function () {
             this.opacity = 1
         },
-        RevertingIcon: function () {
+        revertingIcon: function () {
             this.opacity = 0.7
         }
     }

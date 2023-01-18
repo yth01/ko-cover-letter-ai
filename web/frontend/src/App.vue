@@ -27,7 +27,7 @@ export default {
 @import './assets/styles/minireset.css';
 @import './assets/styles/fonts.css';
 
-* {
+body {
   font-family: NanumSquareNeo-bRg;
   background-color: #F5F5F5;
 }
