@@ -1,23 +1,28 @@
 <template>
-    <div id="input-field">
+    <div id="input-field" v-bind:style="{ border: inputFieldBorder }">
         <main-input-field-loader v-if="isLoading"></main-input-field-loader>
+        <v-snackbar v-model="isSnackbar" :timeout="1000" :light="true" :min-width="0" color="blue" dense shoped text rounded centered>
+            <v-icon color="blue" class="mr-2">mdi-check-circle</v-icon>복사되었습니다.
+        </v-snackbar>
         <div id="input-field-header">
-            <select v-model="selectedModelUrl">
-                <option value='/generative-model/next-sentence'>다음 문장 추천해주기</option>
-                <option value='/generative-model/title'>소제목 생성하기</option>
-                <option value='/generative-model/good-advice'>좋은점 생성하기</option>
-                <option value='/generative-model/regret-advice'>아쉬운점 생성하기</option>
-                <option value='/summary-model/answer'>중요한 3문장 요약</option>
-            </select>
+            <v-select v-model="selectedModelUrl" label="무엇을 도와드릴까요?" :items="modelList" item-text="name" item-value="value" background-color="#FAFAFA" filled rounded hide-details></v-select>
         </div>
 
         <div id="input-field-content">
-            <textarea name="" cols="30" rows="10" v-model="input"></textarea>
+            <textarea id="input-textfield" v-on:focus="focusInputField" v-on:blur="blurInputField" cols="20" rows="10" v-model="input"></textarea>
+            
+            <v-btn id="close-icon" icon elevation="0" v-on:click="clearInput" v-on:mouseover="highlightingIcon"
+                v-on:mouseout="revertingIcon" v-bind:style="{ opacity: iconOpacity }">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <!-- <v-icon>mdi-close</v-icon> -->
         </div>
-        
         <div id="input-field-footer">
-            <font-awesome-icon icon="fa-brands fa-github"></font-awesome-icon>
-            <button v-on:click="analyzeInput">분석하기</button>
+            <v-btn id="copy-icon" elevation="0" v-on:click="copyInput" v-on:mouseover="highlightingIcon"
+            v-on:mouseout="revertingIcon" v-bind:style="{ opacity: iconOpacity }">
+                <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+            <v-btn id="analysis-button" v-on:click="analyzeInput" color="primary" elevation="0" tile>분석하기</v-btn>
         </div>
     </div>
 </template>
@@ -29,15 +34,25 @@ export default {
     data: function () {
         return {
             input: '',
+            modelList: [
+                { name: '다음 문장을 생성하기', value: '/generative-model/next-sentence' },
+                { name: '소제목 추천받기', value: '/generative-model/title' },
+                { name: '좋은 점 조언 받기', value: '/generative-model/good-advice' },
+                { name: '아쉬운 점 조언 받기', value: '/generative-model/regret-advice' },
+                { name: '잘 나타나는 3문장 알아보기', value: '/summary-model/answer' }
+            ],
             selectedModelUrl: '',
             analyzedResults: [],
 
             axiosInstance: this.$axios.create(),
             isLoading: false,
+            isSnackbar: false,
+
+            inputFieldBorder: '3px solid #E9E9E9',
+            iconOpacity: 0.7,
         }
     },
     created() {
-        // 
         this.axiosInstance.interceptors.request.use(
             config => {
                 this.isLoading = true;
@@ -65,6 +80,7 @@ export default {
     methods: {
         analyzeInput: function () {
             const vm = this;
+            vm.$EventBus.$emit('clearOutput')
             this.axiosInstance.post('http://127.0.0.1:8000' + this.selectedModelUrl, {
                 input: this.input
             })
@@ -80,12 +96,37 @@ export default {
                 } else if (vm.selectedModelUrl == '/summary-model/answer') {
                     vm.analyzedResults = response.data.summarized_answer
                 }
-                console.log(vm.analyzedResults);
                 vm.$EventBus.$emit('analyzedResults', vm.analyzedResults)
             })
             .catch(function (error) {
                 console.log(error)
             });
+        },
+
+        focusInputField: function() {
+            this.inputFieldBorder = '3px solid #1976D2'
+        },
+        blurInputField: function() {
+            this.inputFieldBorder = '3px solid #E9E9E9'
+        },
+
+        copyInput: function () {
+            this.$copyText(this.input)
+            .then(() => {
+                this.isSnackbar = true
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        },
+        highlightingIcon: function () {
+            this.iconOpacity = 1
+        },
+        revertingIcon: function () {
+            this.iconOpacity = 0.7
+        },
+        clearInput: function() {
+            this.input = ''
         }
     }
 }
@@ -98,11 +139,12 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    margin: 5% 10%;
+    margin: 2% 14%;
 
     background: #FAFAFA;
-    border: 2px solid #E9E9E9;
-    border-radius: 5px;
+    border-radius: 10px;
+
+    transition: border 0.2s;
 }
 
 #input-field-header {
@@ -111,9 +153,15 @@ export default {
     align-items: center;
     width: 100%;
     background: #FAFAFA;
+    border-radius: 10px;
+    font-family: NanumSquareNeo-dEb;
 }
 
 #input-field-content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
     border-width: 1px 0px;
     border-style: solid;
     border-color: #E9E9E9;
@@ -123,22 +171,41 @@ export default {
     padding: 17.5px 25px;
 }
 
-#input-field-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    background: #FAFAFA;
-}
-
-textarea {
+#input-textfield {
     background: #FAFAFA;
     border: none;
     resize: none;
     width: 100%;
 }
 
-textarea:focus {
-    /* outline: none; */
+#input-textfield:focus {
+    outline: none;
+}
+
+#input-field-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: #FAFAFA;
+    border-radius: 10px;
+    height: 3em;
+}
+
+#copy-icon {
+    border-right: 1px solid #E9E9E9;
+    padding: 7.5px 15px;
+    background: #FAFAFA;
+    border-bottom-left-radius: 10px;
+    height: 100%;
+}
+
+#analysis-button {
+    border-bottom-right-radius: 5px;
+    height: 100%;
+}
+
+#close-icon {
+    margin-left: 25px;
 }
 </style>

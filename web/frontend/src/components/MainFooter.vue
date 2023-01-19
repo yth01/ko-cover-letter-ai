@@ -1,8 +1,10 @@
 <template>
     <footer>
-        <font-awesome-icon icon="fa-brands fa-github" v-on:click="moveGithubProfile" v-on:mouseover="highlightingIcon"
-            v-on:mouseout="revertingIcon" v-bind:style="{ opacity: computedOpacity }" />
-        <p>Copyright 2022. yth01 | All Rights Reserved</p>
+        <v-btn id="footer-icon" icon color="black" v-on:click="moveGithubProfile" v-on:mouseover="highlightingIcon"
+            v-on:mouseout="revertingIcon" v-bind:style="{ opacity: iconOpacity }">
+            <v-icon>mdi-github</v-icon>
+        </v-btn>
+        <div id="footer-text">Copyright 2022. yth01 | All Rights Reserved</div>
     </footer>
 </template>
 
@@ -10,12 +12,7 @@
 export default {
     data: function () {
         return {
-            opacity: 0.7
-        }
-    },
-    computed: {
-        computedOpacity: function () {
-            return this.opacity
+            iconOpacity: 0.7
         }
     },
     methods: {
@@ -23,10 +20,10 @@ export default {
             window.open("https://www.github.com/yth01")
         },
         highlightingIcon: function () {
-            this.opacity = 1
+            this.iconOpacity = 1
         },
         revertingIcon: function () {
-            this.opacity = 0.7
+            this.iconOpacity = 0.7
         }
     }
 }
@@ -46,8 +43,7 @@ footer {
     width: 100%;
 }
 
-p {
-    margin-left: 10px;
+#footer-text {
     font-family: NanumSquareNeo-cBd;
     font-size: x-small;
     opacity: 0.3;

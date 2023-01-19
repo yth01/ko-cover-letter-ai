@@ -1,16 +1,19 @@
 <template>
     <div id="output-field">
-        <div v-for="analyzedResult in analyzedResults" v-bind:key="analyzedResult">{{ analyzedResult }}</div>
+        <li id="output-field-content" v-for="analyzedResult in analyzedResults" v-bind:key="analyzedResult">
+            {{ analyzedResult }}
+        </li>
     </div>
 </template>
 
 <script>
 export default {
     created() {
+        this.$EventBus.$on('clearOutput', () => {
+            this.analyzedResults = []
+        }),
         this.$EventBus.$on('analyzedResults', (analyzedResults) => {
-            console.log(analyzedResults);
-            console.log("passed!!!");
-            this.analyzedResults = analyzedResults
+            this.analyzedResults = analyzedResults 
         })
     },
     data: function () {
@@ -27,11 +30,16 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    margin: 20px 0px;
+    margin: 0% 14%;
 }
 
-div {
-    margin: 10px 0px;
+#output-field-content{
+    background: #FAFAFA;
+    border: 1.5px solid #1976D2;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 100%;
+    margin-bottom: 1%;
 }
+
 </style>

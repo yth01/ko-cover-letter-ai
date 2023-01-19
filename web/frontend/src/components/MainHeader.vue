@@ -15,7 +15,7 @@ h1 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 45px 0px;
+    padding: 30px 0px;
 
     border-bottom: 1px solid #D2D2D2;
     filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.05));

@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <main-header></main-header>
     <main-input-field></main-input-field>
     <main-output-field></main-output-field>
     <main-footer></main-footer>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
 @import './assets/styles/minireset.css';
 @import './assets/styles/fonts.css';
 
-body {
+#app {
   font-family: NanumSquareNeo-bRg;
   background-color: #F5F5F5;
 }
