@@ -9,7 +9,7 @@
         </div>
 
         <div id="input-field-content">
-            <textarea id="input-textfield" v-on:focus="focusInputField" v-on:blur="blurInputField" cols="20" rows="10" v-model="input"></textarea>
+            <textarea id="input-textfield" v-on:focus="focusInputField" v-on:blur="blurInputField" cols="20" rows="10" v-model="input" placeholder="자기소개서를 3문장 이상 입력해 주세요."></textarea>
             
             <v-btn id="close-icon" icon elevation="0" v-on:click="clearInput" v-on:mouseover="highlightingIcon"
                 v-on:mouseout="revertingIcon" v-bind:style="{ opacity: iconOpacity }">
